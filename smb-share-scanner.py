@@ -34,9 +34,15 @@ def get_ips(start_ip, stop_ip):
 
     return ips
 
-
+#
+# Added credentials for listing shares in range
+#
 def smb_share_scan(ip):
-    os.system("smbclient -q -N -L " + ip)
+    testcredentials = os.popen("echo '" + sys.argv[3] + "'|smbclient -U '" + sys.argv[2] + "' -L \\\\" + ip + "\\").read()
+    #os.system("smbclient -q -N -L " + ip)
+    if ("C$" in testcredentials):
+        print ("Credentials works on:" + ip)
+        print (testcredentials)
 
 if len(sys.argv) < 2:
     print(sys.argv[0] + ": <start_ip-stop_ip>")
